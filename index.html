@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Servis HP Jaya</title>
+<style>
+:root{--ink:#1d1a16;--paper:#f6ecd2;--ac:#f2a516;--ok:#3f9d57;--bad:#c9443a}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Trebuchet MS","Segoe UI",sans-serif;background:#16201f;color:var(--ink);min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 16px;background:#0f1818;color:var(--paper);border-bottom:4px solid var(--ac)}
+.top h1{font-size:19px}.top b{color:var(--ac)}
+.tabs{display:flex;gap:8px}
+button{font:inherit;cursor:pointer;border:3px solid var(--ink);border-radius:10px;padding:6px 12px;font-weight:700;background:#fff;box-shadow:0 4px 0 var(--ink)}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+button:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.on.tab,.yl{background:var(--ac)}.go{background:var(--ok);color:#fff}.no{background:var(--bad);color:#fff}
+.pane{display:none}.pane.on{display:block}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:12px;padding:12px 14px;box-shadow:5px 5px 0 #0008;margin-bottom:12px}
+/* kasir */
+.shop{position:relative;height:560px;overflow:hidden;perspective:1000px;background:radial-gradient(circle at 10px 10px,#1d3636 3px,transparent 4px) 0 0/34px 34px,linear-gradient(#2d5757 58%,#1b3434 58%)}
+.sign{position:absolute;top:14px;left:50%;transform:translateX(-50%);padding:5px 22px;border:3px solid #ff5fa2;color:#ffa6d0;text-shadow:0 0 10px #ff5fa2;box-shadow:0 0 18px #ff5fa2,inset 0 0 12px #ff5fa255;border-radius:10px;font-weight:700;white-space:nowrap}
+.shelf{position:absolute;left:3%;top:90px;width:26%;font-size:26px;line-height:1.4;padding:4px 8px;background:linear-gradient(#0000 85%,#5b3b1e 85%);border-bottom:6px solid #3d2711;box-shadow:0 14px 0 -4px #5b3b1e}
+.floor{position:absolute;left:-30%;right:-30%;top:58%;height:80%;background:repeating-conic-gradient(#cfc6b0 0 25%,#8b8672 0 50%) 0 0/90px 90px;transform:rotateX(62deg);transform-origin:top}
+.door{position:absolute;right:4%;top:80px;width:120px;height:255px;border:6px solid #111;background:linear-gradient(#8fd0f5,#d5ecf8 60%,#7a7a7a 60%);overflow:hidden}
+.door i{position:absolute;inset:0;background:#33595c;transition:transform 1s}.door.open i{transform:translateX(100%)}
+#bell{position:absolute;right:calc(4% + 45px);top:46px;font-size:26px;transform-origin:top}
+#bell.ring{animation:ring .25s 6}
+@keyframes ring{50%{transform:rotate(25deg)}}
+.cust{position:absolute;left:50%;bottom:118px;margin-left:-65px;font-size:130px;line-height:1;opacity:0}
+.cust::after{content:"";position:absolute;left:8%;right:8%;bottom:-8px;height:18px;background:#0007;border-radius:50%;filter:blur(3px);z-index:-1}
+.cust.enter{animation:enter 1.9s forwards}.cust.bob{opacity:1;animation:bob 2.2s infinite}.cust.leave{animation:leave 1s forwards}
+@keyframes enter{from{transform:translateX(34vw) scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes leave{from{opacity:1}to{transform:translateX(34vw) scale(.6);opacity:0}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.bub{position:absolute;top:64px;left:50%;transform:translateX(-50%);width:min(390px,92%);background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:10px 14px;box-shadow:5px 5px 0 #0008;font-size:14px;line-height:1.45;display:none;z-index:3}
+.bub h4{font-size:16px}.bub p{margin:4px 0}
+.tag{display:inline-block;background:var(--ink);color:var(--paper);border-radius:20px;padding:1px 9px;font-size:12px;margin-right:4px}
+.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.g{color:var(--ok)}.r{color:var(--bad)}
+.counter{position:absolute;left:4%;right:4%;bottom:0;height:150px;z-index:2}
+.ctop{height:52px;background:linear-gradient(#d49a5c,#b07b43);clip-path:polygon(5% 0,95% 0,100% 100%,0 100%);display:flex;justify-content:center;align-items:center;gap:30px;font-size:30px}
+.cfront{height:98px;background:repeating-linear-gradient(90deg,#8a5a2b 0 80px,#7a4e26 80px 82px);box-shadow:inset 0 8px 10px #0005}
+.reg{background:#222;border:3px solid #000;border-radius:8px;padding:3px 10px;font-size:14px;color:#6dff8f;font-family:monospace;box-shadow:0 5px 0 #000}
+/* part */
+h3{color:#f6ecd2;margin:12px 0 6px;font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.part{flex:1;min-width:170px;max-width:240px;background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:3px;font-size:13px;transform:perspective(600px);transition:transform .2s;box-shadow:4px 6px 0 #0008}
+.part:hover{transform:perspective(600px) rotateY(-9deg) rotateX(4deg) translateY(-4px)}
+.pr{font-weight:700;color:#8a3b00}
+/* rakit */
+#ban{background:#0f1818;color:var(--paper);padding:10px 14px;border-radius:10px;border-left:6px solid var(--ac);margin-bottom:8px}
+#tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.rg{display:grid;grid-template-columns:210px 1fr;gap:12px}
+@media(max-width:760px){.rg{grid-template-columns:1fr}}
+.stl{background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:10px 10px 10px 30px;font-size:12px;line-height:1.7;align-self:start}
+.stl .d{color:var(--ok);text-decoration:line-through}.stl .c{font-weight:700;background:var(--ac)}
+.tbl{position:relative;height:540px;perspective:1000px;background:repeating-linear-gradient(90deg,#a8743f 0 100px,#9a6a38 100px 102px);border:4px solid #6f4522;border-radius:14px;overflow:hidden;display:flex;justify-content:center;align-items:center;cursor:grab;user-select:none}
+.mat{position:absolute;width:310px;height:490px;background:#1e3b2f;border-radius:10px;opacity:.7}
+.phone{position:relative;width:230px;height:440px;transform-style:preserve-3d;transform:rotateX(var(--rx,12deg)) rotateY(var(--ry,-18deg))}
+.pb{position:absolute;inset:0;border-radius:34px;transform-style:preserve-3d;border:3px dashed #fff5}
+.pb.on{border:6px solid #333;box-shadow:1px 1px #222,2px 2px #222,3px 3px #222,4px 4px #222,5px 5px #222,6px 6px #222,7px 7px #1a1a1a,22px 30px 26px #0009}
+.pb.t1{background:linear-gradient(135deg,#8a8f96,#575b61)}.pb.t2{background:linear-gradient(135deg,#d7dde4,#8d99a6)}.pb.t3{background:linear-gradient(135deg,#7f5cff,#2a1f6b 60%,#e07ad0)}
+.pb:not(.on) .slot{display:none}
+.pb.act{border-color:var(--ac);box-shadow:0 0 16px var(--ac)}
+.slot{position:absolute;border:2px dashed #fff6;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fffa;transform:translateZ(6px)}
+.slot.act{border-color:var(--ac);color:var(--ac);box-shadow:0 0 14px var(--ac)}
+.slot.filled{border:2px solid #0008;color:#fff;animation:drop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes drop{from{opacity:0;translate:0 -40px}}
+#s_cam{top:16px;left:16px;width:94px;height:84px}#s_mb{top:108px;left:16px;right:16px;height:150px}#s_bat{top:272px;left:16px;right:16px;height:130px}
+.mb{background:#1f7a4a linear-gradient(#0003 1px,transparent 1px) 0 0/14px 14px}
+.mb.bolted{background-image:radial-gradient(#ccc 5px,transparent 6px),radial-gradient(#ccc 5px,transparent 6px),radial-gradient(#ccc 5px,transparent 6px),radial-gradient(#ccc 5px,transparent 6px);background-position:2px 2px,right 2px top 2px,2px bottom 2px,right 2px bottom 2px;background-size:16px 16px;background-repeat:no-repeat}
+.chip{width:62px;height:62px;background:#222;border:2px solid #999;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#ddd;font-weight:700}
+.bt{background:linear-gradient(#2b2b36,#16161d);position:absolute}.bt.conn::after{content:"";position:absolute;top:-14px;left:44%;width:18px;height:14px;background:var(--ok);border-radius:3px}
+.cm{background:#111;border-radius:50%}.cm::before{content:"";width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6af,#012 60%);border:3px solid #999}
+.lcd{position:absolute;inset:0;border-radius:30px;display:none;align-items:center;justify-content:center;text-align:center;color:#fff;font-size:13px;background:#0b0b0f;border:5px solid #000;transform:translateZ(16px);transition:transform .3s}
+.lcd.show{display:flex}.lcd.lift{transform:translateZ(80px) translateY(-14px) rotateX(-8deg)}
+.lcd.on{background:linear-gradient(160deg,#1fa2ff,#7a2bd6 55%,#ff7a59)}.lcd.amo{border-width:9px}
+#tg{position:absolute;inset:0;transform:translateZ(30px)}
+.tgt{position:absolute;width:26px;height:26px;margin:-13px;border-radius:50%;background:radial-gradient(#fff,#9c9);border:3px solid var(--ac);cursor:pointer;animation:pl 1s infinite}
+@keyframes pl{50%{box-shadow:0 0 14px var(--ac)}}
+.prs{position:absolute;left:50%;top:50%;width:300px;height:490px;margin:-245px 0 0 -150px;display:none;pointer-events:none}.prs.on{display:block}
+.prs b{position:absolute;top:0;bottom:0;width:16px;background:linear-gradient(90deg,#555,#999,#555)}
+#plate{position:absolute;left:0;right:0;top:0;height:52px;background:linear-gradient(#d6dbe0,#7b848b);border:3px solid #333;border-radius:6px;box-shadow:0 10px 14px #0006;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.tray{background:#0f1818;color:var(--paper);border:3px solid var(--ink);border-radius:12px;padding:12px;margin-top:12px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}.opt{background:var(--paper);text-align:left;min-width:150px}.opt.sel{background:var(--ac)}.opt small{display:block;font-weight:400;font-size:12px}
+.gauge{position:relative;height:22px;background:#fff;border:2px solid #000;border-radius:8px;margin:8px 0;overflow:hidden}.gauge i{display:block;height:100%;background:#777}
+.gauge u{position:absolute;top:0;bottom:0;left:65%;width:25%;background:#3f9d57aa;border:solid #060;border-width:0 2px}
+.bar{height:16px;background:#fff;border:2px solid #000;border-radius:8px;overflow:hidden;margin:8px 0}.bar i{display:block;width:0;height:100%;background:var(--ac)}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#000d;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;z-index:9;pointer-events:none}#toast.on{opacity:1}
+.opt{touch-action:none}
+.ghost{position:fixed;transform:translate(-50%,-50%) rotate(-4deg);background:var(--ac);border:3px solid var(--ink);border-radius:10px;padding:8px 12px;font-weight:700;pointer-events:none;z-index:20;box-shadow:8px 12px 12px #0007}
+.pb.hov{box-shadow:0 0 24px 6px var(--ac)}
+.port{position:absolute;width:26px;height:26px;margin:-13px;border:4px solid;border-radius:6px;background:#000a;animation:pl 1s infinite}
+.port.from{cursor:crosshair;border-radius:50%}
+.lcd.flip{transform:translateX(165px) translateZ(40px) rotateY(55deg)}
+#s_kit{top:408px;left:16px;right:16px;height:20px}.slot.kt{background:#333;font-size:12px}
+.pb.gk::before{content:"";position:absolute;inset:4px;border:3px solid #2dd;border-radius:28px;opacity:.7}
+.pb.gl::after{content:"";position:absolute;inset:12px;border:3px solid #fd3;border-radius:22px;opacity:.7}
+#lap{position:fixed;inset:0;background:#000b;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;perspective:1100px}
+.lscr{width:min(580px,92vw);height:340px;background:#111;border:10px solid #333;border-radius:12px 12px 0 0;transform-origin:bottom;transform:rotateX(-85deg);transition:transform 1s;overflow:hidden;position:relative;color:#cfe;font-size:13px}.lscr.open{transform:rotateX(-8deg)}
+.lbase{width:min(660px,98vw);height:22px;background:linear-gradient(#ccc,#777);border-radius:0 0 16px 16px}
+.lc{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px}.lscr .bar{width:60%}
+.dk{height:100%;background:linear-gradient(135deg,#1fa2ff,#7a2bd6);padding:14px;display:flex;gap:16px;flex-wrap:wrap;align-content:flex-start;color:#fff;text-align:center;font-size:12px}
+.ic{width:76px;font-size:32px;cursor:pointer}.ic.blink{animation:pl 1s infinite}
+.win{position:absolute;inset:14px 24px;background:#eee;color:#111;border:2px solid #345;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px;overflow:auto}
+#log{background:#111;color:#7f7;height:70px;overflow:auto;font-size:11px;padding:4px;white-space:pre-wrap}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div class="top"><h1>📱 Servis HP Jaya</h1>
+ <div class="tabs"><button class="tab" id="t_kasir" onclick="go('kasir')">🧾 Kasir</button><button class="tab" id="t_part" onclick="go('part')">🛒 Toko part</button><button class="tab" id="t_rakit" onclick="go('rakit')">🛠 Meja rakit</button></div>
+ <div>Kas: <b id="money"></b></div></div>
+
+<section class="pane" id="p_kasir"><div class="shop">
+ <div class="sign">SERVIS HP JAYA · BUKA</div>
+ <div class="shelf">📱🔋📷<br>🔌🎧💿</div>
+ <div id="bell">🔔</div><div class="door" id="door"><i></i></div>
+ <div class="floor"></div>
+ <div class="cust" id="cust"></div>
+ <div class="bub" id="bub"></div>
+ <div class="counter"><div class="ctop"><span>📱</span><div class="reg" id="reg"></div><span>🧰</span></div><div class="cfront"></div></div>
+</div></section>
+
+<section class="pane" id="p_part"><div class="wrap"><div class="card" id="need"></div><div id="parts"></div></div></section>
+
+<section class="pane" id="p_rakit"><div class="wrap">
+ <div class="card" id="noJob">Belum ada pesanan yang dikerjakan. Terima pelanggan di Kasir dan beli part di Toko part.</div>
+ <div id="rig">
+  <div id="ban"></div><div id="tools"></div>
+  <div class="rg"><ol class="stl" id="stl"></ol>
+   <div class="tbl" id="tbl"><div class="mat"></div>
+    <div class="phone" id="phone"><div class="pb" id="pb"><div class="slot" id="s_cam"></div><div class="slot" id="s_mb"></div><div class="slot" id="s_bat"></div><div class="slot" id="s_kit"></div></div><div class="lcd" id="lcd"></div><div id="tg"></div></div>
+    <div class="prs" id="prs"><b style="left:-18px"></b><b style="right:-18px"></b><div id="plate">MESIN PRESS</div></div>
+   </div></div>
+  <div class="tray" id="tray"></div>
+ </div>
+</div></section>
+<div id="lap"><div class="lscr" id="lscr"></div><div class="lbase"></div><button class="no" style="margin-top:14px" onclick="lapClose()">Tutup laptop</button></div>
+<div id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id),fmt=v=>"Rp "+(v*1000).toLocaleString("id-ID"),rnd=a=>a[Math.floor(Math.random()*a.length)];
+const IC={kit:"🔊",body:"📱",mb:"🟩",bat:"🔋",cam:"📷",screen:"🖥️",os:"💿",extra:"🎧"};
+const CN={kit:"Komponen kecil",body:"Body",mb:"Motherboard",bat:"Baterai",cam:"Kamera",screen:"LCD",os:"Lisensi OS",extra:"Tambahan"};
+const P={
+ body:[{n:"Body Plastik",p:300,st:1,t:1},{n:"Body Aluminium",p:700,st:3,t:2},{n:"Body Kaca Premium",p:1500,st:5,t:3}],
+ kit:[{n:"Kit komponen standar",p:150},{n:"Kit komponen premium",p:400,st:1}],
+ mb:[{n:"Chip Entry 4 core",p:400,pf:2},{n:"Chip Mid 8 core",p:1200,pf:5},{n:"Chip Flagship Pro",p:3000,pf:9}],
+ bat:[{n:"Baterai 3.000 mAh",p:200,bt:3},{n:"Baterai 5.000 mAh",p:400,bt:6},{n:"Baterai 7.000 mAh",p:700,bt:9}],
+ cam:[{n:"Kamera 12 MP",p:200,cm:3},{n:"Kamera 50 MP",p:600,cm:6},{n:"Kamera 200 MP",p:1400,cm:9}],
+ screen:[{n:"LCD biasa",p:300,st:2},{n:"LCD AMOLED",p:800,st:5},{n:"AMOLED 120 Hz",p:1500,st:8}],
+ os:[{n:"Android Lite",p:0,pf:0},{n:"Android Standar",p:100,pf:1},{n:"Android Pro",p:300,pf:2}],
+ extra:[{n:"Charger cepat",p:250,bt:1},{n:"Casing silikon",p:50,st:1},{n:"Anti gores",p:50,st:1},{n:"Headset",p:100}]
+};
+const NEEDS={pf:{label:"Gamer",txt:"Saya butuh HP kencang buat main game berat.",min:7,lab:"Performa"},cm:{label:"Fotografer",txt:"Kameranya harus bagus buat konten.",min:6,lab:"Kamera"},bt:{label:"Driver ojek",txt:"Baterainya harus awet seharian.",min:6,lab:"Baterai"},st:{label:"Anak gaul",txt:"Yang penting tampilannya mewah.",min:8,lab:"Gaya"}};
+const TOOLS={pinset:"🖐️ Pinset",obeng:"🪛 Obeng",press:"🗜️ Mesin press",laptop:"💻 Laptop",tester:"🔍 Tester"};
+const ST=[
+ {k:"body",l:"Letakkan frame/body di matras",tool:"pinset"},
+ {k:"gasket",l:"Pasang gasket anti air & perekat frame",tool:"pinset",pts:[[22,24],[208,24],[22,416],[208,416]]},
+ {k:"kit",l:"Pasang komponen kecil (tombol, speaker, mic, port)",tool:"pinset"},
+ {k:"cam",l:"Pasang modul kamera",tool:"pinset"},
+ {k:"mb",l:"Pasang motherboard ke frame",tool:"pinset"},
+ {k:"wa",l:"Sambung kabel antena",tool:"pinset",wire:3},
+ {k:"wp",l:"Sambung flex port charger",tool:"pinset",wire:4},
+ {k:"mbs",l:"Baut motherboard + pasang shield",tool:"obeng",pts:[[28,120],[200,160],[28,246],[200,246]]},
+ {k:"wc",l:"Sambung flex kamera",tool:"pinset",wire:0},
+ {k:"bat",l:"Tempel baterai",tool:"pinset"},
+ {k:"wb",l:"Sambung kabel baterai (paling akhir)",tool:"pinset",wire:1},
+ {k:"screen",l:"Letakkan LCD (dibuka ke samping)",tool:"pinset"},
+ {k:"wl",l:"Sambung flex LCD",tool:"pinset",wire:2},
+ {k:"test",l:"Tes fungsi sebelum ditutup",tool:"tester",chk:["Sentuhan layar","Kamera","Speaker","Mikrofon","Charging","Sinyal SIM","Wi-Fi"]},
+ {k:"glue",l:"Tempel perekat layar",tool:"pinset",pts:[[110,14],[220,220],[110,428],[12,220]]},
+ {k:"press",l:"Tutup & press LCD di mesin press",tool:"press"},
+ {k:"os",l:"Flash OS lewat laptop",tool:"laptop"},
+ {k:"qc",l:"QC akhir: IMEI, firmware, panas",tool:"tester",chk:["Cek IMEI","Update firmware","Tes charging","Tes panas 5 menit","Sinyal & Wi-Fi"]},
+ {k:"extra",l:"Aksesori (opsional), serahkan",tool:"pinset"}
+];
+const NAMES=["Pak Budi","Bu Sari","Mas Rangga","Mbak Dewi","Cak Hadi","Bu Ratna","Dimas","Nadia"];
+let money=4000,sold=0,cust=null,build={},extras=[],stepI=0,used=0,phase="idle",tool="pinset",tdone=0,tab="kasir",typed=false,say="",res="",pr=0,iv=null,held=false,boot=false,ry=-18,rx=12,tv=null,drag=null;
+const stock={};for(const k in P)stock[k]=P[k].map(()=>0);
+const spec=o=>[o.pf&&"⚡"+o.pf,o.cm&&"📷"+o.cm,o.bt&&"🔋"+o.bt,o.st&&"✨"+o.st].filter(Boolean).join(" ")||"—";
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(e.h);e.h=setTimeout(()=>e.classList.remove("on"),2200)}
+function go(t){tab=t;render()}
+function setTool(t){tool=t;render()}
+function stats(){const e=extras.map(i=>P.extra[i]),s=f=>Object.values(build).reduce((a,x)=>a+(x&&x[f]||0),0)+e.reduce((a,x)=>a+(x[f]||0),0);return{pf:s("pf"),cm:s("cm"),bt:s("bt"),st:s("st")}}
+
+function arrive(){
+ cust={name:rnd(NAMES),face:rnd(["🧑","👩","👨","👵","🧔","👧","🧑‍🦱"]),need:rnd(Object.keys(NEEDS)),budget:Math.round((2000+Math.random()*10000)/100)*100};
+ build={};extras=[];stepI=0;used=0;tdone=0;ck=[];typed=false;say="";phase="intro";
+ $("door").classList.add("open");$("bell").classList.add("ring");$("cust").className="cust enter";go("kasir");
+ setTimeout(()=>{$("door").classList.remove("open");$("bell").classList.remove("ring");$("cust").className="cust bob";phase="ask";
+  typeText(`Selamat siang! Saya ${cust.name}. ${NEEDS[cust.need].txt} Anggaran saya ${fmt(cust.budget)}.`)},2200);
+}
+function typeText(t){let i=0;clearInterval(tv);tv=setInterval(()=>{say=t.slice(0,++i);const e=$("say");if(e)e.textContent=say;if(i>=t.length){clearInterval(tv);typed=true;render()}},26);render()}
+function accept(){phase="work";go("part")}
+function leave(){phase="leave";$("cust").className="cust leave";render();setTimeout(arrive,1200)}
+function kasirHTML(){
+ const nd=NEEDS[cust.need];
+ if(phase==="ask")return `<p id="say">${say}</p>`+(typed?`<span class="tag">${nd.label}</span><span class="tag">${nd.lab} ≥ ${nd.min}</span><div class="btns"><button class="go" onclick="accept()">Terima</button><button class="no" onclick="leave()">Tolak</button></div>`:"");
+ if(phase==="work")return `<p>Oke, saya tunggu di sini ya. Anggaran ${fmt(cust.budget)}, butuh ${nd.lab} ≥ ${nd.min}.</p><div class="btns"><button onclick="go('part')">🛒 Beli part</button><button onclick="go('rakit')">🛠 Rakit</button></div>`;
+ return phase==="done"?res:"";
+}
+
+function buy(k,i){const o=P[k][i];if(money<o.p)return toast("Kas tidak cukup");money-=o.p;stock[k][i]++;render()}
+function place(k,i){
+ const S=ST[stepI];if(tool!==S.tool)return toast("Alat salah. Pakai "+TOOLS[S.tool]);
+ if(k==="extra"){const j=extras.indexOf(i);j<0?extras.push(i):extras.splice(j,1);return render()}
+ stock[k][i]--;build[k]=P[k][i];used+=P[k][i].p;
+ if(k==="os"){boot=true;render();let w=0;const t=setInterval(()=>{w+=5;const b=$("bb");if(b)b.style.width=w+"%";if(w>=100){clearInterval(t);boot=false;stepI++;render()}},80);return}
+ stepI++;render();
+}
+function hit(){const S=ST[stepI];if(tool!==S.tool)return toast("Alat salah. Pakai "+TOOLS[S.tool]);tdone++;if(tdone>=S.pts.length){tdone=0;stepI++}render()}
+function bindPress(){
+ const b=$("pbtn");
+ b.onpointerdown=()=>{if(tool!=="press")return toast("Pilih alat Mesin press dulu");held=true;pr=0;clearInterval(iv);
+  iv=setInterval(()=>{pr=Math.min(100,pr+2);$("gi").style.width=pr+"%";$("plate").style.transform=`translateY(${pr*3}px)`;$("lcd").style.transform=`translateZ(${80-pr*.62}px) translateY(${-14+pr*.14}px)`},30)};
+ const up=()=>{if(!held)return;held=false;clearInterval(iv);
+  if(pr<65)toast("Tekanan kurang, LCD belum menempel. Coba lagi.");
+  else if(pr<=90){toast("LCD menempel rapi!");stepI++}
+  else{toast("Terlalu kuat, LCD retak! Pasang LCD baru.");build.screen=null;stepI=11}
+  pr=0;render()};
+ b.onpointerup=up;b.onpointerleave=up;
+}
+function finish(){
+ const s=stats(),nd=NEEDS[cust.need],met=s[cust.need]>=nd.min;
+ extras.forEach(i=>{stock.extra[i]--;used+=P.extra[i].p});
+ const pay=met?cust.budget:Math.round(cust.budget/2),net=pay-used;
+ money+=pay;if(met)sold++;cust.mood=met?"😄":"😕";phase="done";
+ res=`<h4>${met?"Pas sekali!":"Kurang puas."}</h4><p>${nd.lab} ${s[cust.need]} (butuh ${nd.min}). ${met?"":"Dia hanya membayar setengah."}</p><p>Part terpakai ${fmt(used)}, dibayar ${fmt(pay)}.<br><b class="${net>=0?"g":"r"}">${net>=0?"Untung":"Rugi"} ${fmt(Math.abs(net))}</b></p><div class="btns"><button class="go" onclick="leave()">Pelanggan berikutnya</button></div>`;
+ go("kasir");
+}
+
+function drawPhone(){
+ const S=ST[stepI],b=build,ph=$("phone");
+ ph.style.setProperty("--rx",rx+"deg");ph.style.setProperty("--ry",ry+"deg");
+ $("pb").className="pb"+(b.body?" on t"+b.body.t:"")+(S.k==="body"?" act":"")+(stepI>1?" gk":"")+(stepI>14?" gl":"");
+ const fill=(id,o,cls,inner,txt,key)=>{const e=$(id);if(o){e.className="slot filled "+cls;e.innerHTML=inner}else{e.className="slot"+(S.k===key?" act":"");e.innerHTML=txt}};
+ fill("s_mb",b.mb,"mb"+(stepI>7?" bolted":""),`<div class="chip">${b.mb?b.mb.n.split(" ")[1].toUpperCase():""}</div>`,"Motherboard","mb");
+ fill("s_cam",b.cam,"cm","","Kamera","cam");
+ fill("s_kit",b.kit,"kt","🔊 🎙️ 🔌","Komponen kecil","kit");
+ fill("s_bat",b.bat,"bt",b.bat?"🔋 "+b.bat.n.split(" ")[1]:"","Baterai","bat");
+ const L=$("lcd");L.style.transform="";
+ if(b.screen){L.className="lcd show"+(stepI===12||stepI===13?" flip":stepI===14||stepI===15?" lift":"")+(b.screen.st>=5?" amo":"")+(stepI>=17||stepI===13?" on":"");L.innerHTML=stepI>=17?`📱<br><b>${b.os.n}</b><br>siap dipakai`:stepI===13?"Mode tes ✔":"LCD"}else L.className="lcd";
+ $("prs").className="prs"+(S.k==="press"?" on":"");$("plate").style.transform="";
+ const tg=$("tg");let sv="";
+ ST.forEach((s,i)=>{if(s.wire!==undefined&&i<stepI&&(s.wire!==2||b.screen)){const w=WR[s.wire];sv+=`<path d="${wp(w.f,w.t)}" stroke="${w.c}" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="${w.f[0]}" cy="${w.f[1]}" r="5" fill="${w.c}"/><circle cx="${w.t[0]}" cy="${w.t[1]}" r="5" fill="${w.c}"/>`}});
+ sv+=`<path id="wlive" fill="none" stroke="${S.wire!==undefined?WR[S.wire].c:"none"}" stroke-width="4" stroke-dasharray="6 4" stroke-linecap="round"/>`;
+ tg.innerHTML=`<svg width="230" height="440" style="position:absolute;inset:0;pointer-events:none;overflow:visible">${sv}</svg>`;
+ if(S.wire!==undefined){const w=WR[S.wire];[["from",w.f],["to",w.t]].forEach(([c,p])=>{const d=document.createElement("div");d.className="port "+c;d.style.cssText=`left:${p[0]}px;top:${p[1]}px;border-color:${w.c}`;tg.appendChild(d);if(c==="from")d.onpointerdown=e=>startWire(e,S)})}
+
+ if(S.pts)S.pts.forEach((p,i)=>{if(i>=tdone){const d=document.createElement("div");d.className="tgt";d.style.cssText=`left:${p[0]}px;top:${p[1]}px`;d.onclick=e=>{e.stopPropagation();hit()};tg.appendChild(d)}});
+}
+function drawTray(){
+ const S=ST[stepI],k=S.k,t=$("tray");
+ if(boot){t.innerHTML=`<h4>Flash OS berjalan…</h4><div class="bar"><i id="bb"></i></div>`;return}
+ if(S.wire!==undefined){t.innerHTML=`<p>Seret ujung kabel (titik berkedip) ke soket tujuan di motherboard dengan ${TOOLS[S.tool]}. Lepas tepat di atas soket.</p>`;return}
+ if(S.pts){t.innerHTML=`<p>Klik titik bercahaya di HP dengan ${TOOLS[S.tool]} (${tdone}/${S.pts.length}). Geser meja untuk memutar HP.</p>`;return}
+ if(k==="press"){t.innerHTML=`<p>Tahan tombol sampai bar masuk zona hijau (65–90%), lalu lepas. Lewat zona hijau, LCD retak.</p><div class="gauge"><i id="gi" style="width:${pr}%"></i><u></u></div><button id="pbtn" class="go">Tahan untuk menekan</button>`;bindPress();return}
+ if(S.chk){t.innerHTML=`<p>Uji tiap fungsi dengan ${TOOLS[S.tool]} (${ck.length}/${S.chk.length}).</p><div class="opts">${S.chk.map((c,i)=>`<button class="opt${ck.includes(i)?" sel":""}" onclick="chk(${i})">${ck.includes(i)?"✔ ":""}${c}</button>`).join("")}</div>`;return}
+ if(k==="os"){t.innerHTML=stock.os.some(x=>x>0)?`<p>Nyalakan laptop, buka FlashTool, pilih OS, lalu flash ke HP lewat USB.</p><button class="go" onclick="openLap()">💻 Nyalakan laptop</button>`:`<p>Kamu belum punya Lisensi OS. Beli dulu di Toko part.</p>`;return}
+ let h="",n=0;
+ P[k].forEach((o,i)=>{if(stock[k][i]>0){n++;h+=`<button class="opt${k==="extra"&&extras.includes(i)?" sel":""}" ${k==="extra"?`onclick="place('${k}',${i})"`:`data-k="${k}" data-i="${i}" onclick="if(!event.detail)place('${k}',${i})"`}>${o.n}<small>${spec(o)} · stok ${stock[k][i]}</small></button>`}});
+ h=n?`${k==="extra"?"":"<p>Seret part ke HP di meja.</p>"}<div class="opts">${h}</div>`:`<p>Kamu belum punya ${CN[k]}${k==="extra"?"":". Beli dulu di Toko part"}.</p>`;
+ if(k==="extra")h+=`<div class="btns"><button class="go" onclick="finish()">Selesai, serahkan HP</button></div>`;
+ t.innerHTML=h;
+}
+function render(){
+ ["kasir","part","rakit"].forEach(t=>{$("p_"+t).classList.toggle("on",t===tab);$("t_"+t).classList.toggle("on",t===tab)});
+ $("money").textContent=fmt(money);$("reg").textContent=fmt(money);
+ if(!cust)return;
+ const nd=NEEDS[cust.need],bub=$("bub"),h=kasirHTML();
+ bub.style.display=h?"block":"none";bub.innerHTML=h;
+ $("cust").textContent=phase==="done"?cust.mood:cust.face;
+ const w=phase==="work";
+ $("need").innerHTML=w?`<b>${cust.name}</b> (${nd.label}) · anggaran <b>${fmt(cust.budget)}</b> · butuh ${nd.lab} ≥ ${nd.min}. Beli part yang pas, sisa part tetap jadi stok.`:"Belum ada pesanan. Terima pelanggan di Kasir. Kamu tetap bisa belanja stok.";
+ let ph="";
+ for(const k in P){ph+=`<h3>${IC[k]} ${CN[k]}</h3><div class="row">`;P[k].forEach((o,i)=>{ph+=`<div class="part"><b>${o.n}</b><span>${spec(o)}</span><span class="pr">${fmt(o.p)}</span><span>Stok: ${stock[k][i]}</span><button class="yl" onclick="buy('${k}',${i})">Beli</button></div>`});ph+="</div>"}
+ $("parts").innerHTML=ph;
+ $("noJob").style.display=w?"none":"block";$("rig").style.display=w?"block":"none";
+ if(!w)return;
+ const S=ST[stepI];
+ $("ban").innerHTML=`Langkah ${stepI+1}/${ST.length}: <b>${S.l}</b> · alat: ${TOOLS[S.tool]}`;
+ $("tools").innerHTML=Object.keys(TOOLS).map(t=>`<button class="${t===tool?"yl":""}" onclick="setTool('${t}')">${TOOLS[t]}</button>`).join("");
+ $("stl").innerHTML=ST.map((s,i)=>`<li class="${i<stepI?"d":i===stepI?"c":""}">${s.l}</li>`).join("");
+ drawPhone();drawTray();
+}
+$("tbl").onpointerdown=e=>{drag=[e.clientX,e.clientY,ry,rx]};
+window.addEventListener("pointerup",()=>drag=null);
+$("tbl").onpointermove=e=>{if(!drag)return;ry=Math.max(-50,Math.min(50,drag[2]+(e.clientX-drag[0])/3));rx=Math.max(0,Math.min(55,drag[3]-(e.clientY-drag[1])/3));$("phone").style.setProperty("--rx",rx+"deg");$("phone").style.setProperty("--ry",ry+"deg")};
+const WR=[{f:[104,60],t:[204,122],c:"#ffd23f"},{f:[26,300],t:[26,196],c:"#ff5f5f"},{f:[214,330],t:[204,190],c:"#5fb8ff"},{f:[190,34],t:[130,112],c:"#7dff7d"},{f:[150,418],t:[150,254],c:"#ff8cf0"}];
+const wp=(a,b)=>`M${a[0]} ${a[1]}C${a[0]+50} ${a[1]},${b[0]-50} ${b[1]},${b[0]} ${b[1]}`;
+function startWire(e,S){
+ if(tool!==S.tool)return toast("Alat salah. Pakai "+TOOLS[S.tool]);
+ e.preventDefault();e.stopPropagation();
+ const w=WR[S.wire],r=$("tg").getBoundingClientRect(),lv=$("wlive");
+ const mv=ev=>lv.setAttribute("d",wp(w.f,[(ev.clientX-r.left)/r.width*230,(ev.clientY-r.top)/r.height*440]));
+ const up=ev=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);
+  const el=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(el&&el.classList.contains("to")){stepI++;toast("Kabel terpasang!")}else toast("Lepas tepat di atas soket tujuan");
+  render()};
+ addEventListener("pointermove",mv);addEventListener("pointerup",up);
+}
+$("tray").addEventListener("pointerdown",e=>{
+ const b=e.target.closest(".opt[data-k]");if(!b)return;
+ const k=b.dataset.k,i=+b.dataset.i,x0=e.clientX,y0=e.clientY,pb=$("pb");let g=null,moved=false;
+ const inR=(ev)=>{const r=pb.getBoundingClientRect();return ev.clientX>r.left&&ev.clientX<r.right&&ev.clientY>r.top&&ev.clientY<r.bottom};
+ const mv=ev=>{if(!moved&&Math.hypot(ev.clientX-x0,ev.clientY-y0)>8){moved=true;g=document.createElement("div");g.className="ghost";g.textContent=IC[k]+" "+P[k][i].n;document.body.appendChild(g)}
+  if(g){g.style.left=ev.clientX+"px";g.style.top=ev.clientY+"px";pb.classList.toggle("hov",inR(ev))}};
+ const up=ev=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);if(g)g.remove();pb.classList.remove("hov");
+  if(!moved||inR(ev))place(k,i);else toast("Jatuhkan part tepat di atas HP")};
+ addEventListener("pointermove",mv);addEventListener("pointerup",up);
+});
+let ck=[],lt=[],fi=null,pend=false;
+function chk(i){const S=ST[stepI];if(tool!==S.tool)return toast("Alat salah. Pakai "+TOOLS[S.tool]);if(ck.includes(i)||pend)return;pend=true;toast("Menguji "+S.chk[i]+"…");
+ setTimeout(()=>{pend=false;ck.push(i);if(ck.length>=S.chk.length){ck=[];stepI++;toast("Semua tes lulus ✔")}render()},600)}
+const lapT=(f,ms)=>lt.push(setTimeout(f,ms));
+function lapClose(){lt.forEach(clearTimeout);lt=[];clearInterval(fi);$("lap").style.display="none"}
+function openLap(){
+ if(tool!=="laptop")return toast("Pilih alat Laptop dulu");
+ const s=$("lscr");$("lap").style.display="flex";s.className="lscr";s.innerHTML="";
+ lapT(()=>s.classList.add("open"),100);
+ lapT(()=>{s.innerHTML=`<div class="lc"><div style="font-size:60px">💻</div><p>Menyalakan laptop…</p><div class="bar"><i id="lb" style="transition:width 1.5s"></i></div></div>`;setTimeout(()=>{const b=$("lb");if(b)b.style.width="100%"},60)},1200);
+ lapT(()=>{s.innerHTML=`<div class="dk"><div class="ic">🗑️<br>Recycle Bin</div><div class="ic">📁<br>Dokumen</div><div class="ic blink" onclick="lapApp()">⚡<br>FlashTool</div><p style="width:100%;margin-top:auto">Klik ikon FlashTool untuk membuka aplikasi</p></div>`},3000);
+}
+function lapApp(){
+ const o=P.os.map((x,i)=>stock.os[i]>0?`<option value="${i}">${x.n}</option>`:"").join("");
+ $("lscr").innerHTML=`<div class="win"><b>⚡ FlashTool 2.1</b><label>Pilih OS (ROM): <select id="osel">${o}</select></label><label>Mode: <select><option>Flash penuh</option><option>Update</option></select></label><label><input type="checkbox" checked> Bersihkan data (wipe)</label><div><button id="usb" onclick="lapUsb()">🔌 Hubungkan HP via USB</button> <span id="us">belum terhubung</span></div><button id="fl" class="go" disabled onclick="lapFlash()">▶ Mulai flash</button><pre id="log"></pre><div class="bar"><i id="fb"></i></div></div>`}
+function lapUsb(){$("usb").disabled=true;$("us").textContent="mencari perangkat…";lapT(()=>{$("us").textContent="✅ HP terdeteksi (mode flash)";$("fl").disabled=false},1100)}
+function lapFlash(){
+ $("fl").disabled=true;const idx=+$("osel").value,L=["Membaca tabel partisi…","Memverifikasi checksum ROM…","Menghapus data (wipe)…","Menulis boot.img","Menulis system.img (1,8 GB)","Menulis vendor.img","Memperbarui firmware modem","Verifikasi tanda tangan","Selesai ✔ HP restart"];
+ let i=0;fi=setInterval(()=>{$("log").textContent+=L[i]+"\n";$("log").scrollTop=999;i++;$("fb").style.width=i/L.length*100+"%";
+  if(i>=L.length){clearInterval(fi);lapT(()=>{stock.os[idx]--;build.os=P.os[idx];used+=P.os[idx].p;stepI++;lapClose();render();toast("OS terpasang, HP menyala!")},900)}},520)}
+render();arrive();
+</script>
+</body>
+</html>
